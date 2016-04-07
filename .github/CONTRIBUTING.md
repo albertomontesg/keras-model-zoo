@@ -10,7 +10,6 @@ models
 ├── {models-name}
 |   ├── README.md
 |   ├── download_weights.sh
-|   ├── {model_name}_model.json
 |   ├── model.py
 |   ├── examples [Optional]
 |   |   └── ...
@@ -24,15 +23,6 @@ Each model should have a README.md file where a description of the model is give
 The README.md file should follow the structure available [here](README_TEMPLATE.md).
 
 
-### Model as JSON
-Also each model should have its definition to JSON so it would be easier for anyone to import it. To obtain this file, run the following on your python script:
-```python
-json_string = model.to_json()
-with open('{model_name}_model.json', 'w') as f:
-    f.write(json_string)
-```
-If the model have its own variations and want to provide all of them, please create a folder called `models` and store all the JSON definitions on this folder.
-
 ### Model weights
 Another important part to define are the weights of the model. Due to the huge size of the file which stores the weights (~300MB), the weights will not be stored on the repository. On the other hand they should be self hosted by anyone and then give a script to download the weights. All the weights must be stored in `.h5` format. One recommendation is to store in Dropbox and make the file public.
 
@@ -45,6 +35,7 @@ So for any other user who wants to work with this model and its weights, only re
 ```bash
 sh download_weights.sh
 ```
+
 ### Model in Python
 
 In addition to the model's definition and its weights, it would be great to have a python script where the model has been defined. This python file can have a function defined which return the model itself. See the following example:
@@ -104,6 +95,7 @@ def VGG_16(weights_path=None):
 
     return model
 ```
+In the case of multiple models definitions (some variations in dimensions or architecture) at the `models.py` file write one function for each variation of the model.
 
 ### Extra information
 It is also recommendable to give some additional resources such as examples of model usage or python notebooks. All this resources should be stored on its corresponding directories.

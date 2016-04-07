@@ -1,8 +1,9 @@
+from keras.layers.convolutional import (Convolution2D, MaxPooling2D,
+                                        ZeroPadding2D)
+from keras.layers.core import Dense, Dropout, Flatten
 from keras.models import Sequential
-from keras.layers.core import Flatten, Dense, Dropout
-from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.optimizers import SGD
-import cv2, numpy as np
+
 
 def VGG_16(weights_path=None):
     model = Sequential()
