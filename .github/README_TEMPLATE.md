@@ -1,16 +1,14 @@
 # {model_name}
 ## Information
 
-Reference:
+**Reference**:
 ```bibtex
 Bibtex reference of the paper
 ```
 
-Framework used: *Keras vX.X* (Also say Caffe or whatever if the model has been ported)
+**Framework used**: *Keras vX.X* (Also say Caffe or whatever if the model has been ported)
 
-License:
-
-Dataset used to train:
+**Dataset used to train**:
 
 
 ## Description

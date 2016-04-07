@@ -1,7 +1,7 @@
 # VGG-16
 ## Information
 
-Reference:
+**Reference**:
 ```bibtex
 @article{DBLP:journals/corr/SimonyanZ14a,
   author    = {Karen Simonyan and
@@ -17,11 +17,11 @@ Reference:
 }
 ```
 
-Framework used: *Caffe*
+**Framework used**: *Caffe*
 
-License: *unrestricted use*
+**License**: *unrestricted use*
 
-Dataset used to train: ILSVRC-2014
+**Dataset used to train**: ILSVRC-2014
 
 
 ## Description
