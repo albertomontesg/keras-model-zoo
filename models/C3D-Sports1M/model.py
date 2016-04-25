@@ -1,7 +1,10 @@
-from keras.models import Sequential
+import numpy as np
+
+from keras.layers.convolutional import (Convolution3D, MaxPooling3D,
+                                        ZeroPadding3D)
 from keras.layers.core import Dense, Dropout, Flatten
-from keras.layers.convolutional import Convolution3D, MaxPooling3D, ZeroPadding3D
-from keras.optimizers import SGD
+from keras.models import Sequential
+
 
 def C3D_Sports1M(weights_path=None):
     model = Sequential()
@@ -63,3 +66,17 @@ def C3D_Sports1M(weights_path=None):
         model.load_weights(weights_path)
 
     return model
+
+def C3D_Sports1M_mean(dim_ordering='th'):
+    ''' Returns the mean which was trained the model
+    The mean has the same shape as the input of the model and has to be applied just before input
+    the data into the model.
+    The mean was computed along all the samples for all the channels and all the volumetric
+    positions of the input which has the following shape (for theano dimension ordering):
+        `(batch_size, channels, temporeal_length, heigth, width)`
+        `(:, 3, 16, 128, 171)`
+    '''
+    mean = np.load('c3d-sports1M_mean.npy')
+    if dim_ordering == 'tf':
+        mean = mean.transpose(0, 2, 3, 4, 1)
+    return mean
