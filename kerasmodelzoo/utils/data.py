@@ -2,7 +2,7 @@ import os
 import sys
 
 import numpy as np
-from progressbar import Bar, Percentage, ProgressBar
+from progressbar import ProgressBar
 
 from six.moves.urllib.error import HTTPError, URLError
 from six.moves.urllib.request import urlretrieve
@@ -27,7 +27,7 @@ def download_file(fname, origin):
     def dl_progress(count, block_size, total_size):
         global progbar
         if progbar is None:
-            progbar = ProgressBar(widgets=[Percentage(), Bar()], max_value=total_size)
+            progbar = ProgressBar(max_value=total_size)
         elif count*block_size < total_size:
             progbar.update(count*block_size)
         else:

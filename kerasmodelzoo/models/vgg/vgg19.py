@@ -1,6 +1,6 @@
 from keras.layers.convolutional import (Convolution2D, MaxPooling2D,
                                         ZeroPadding2D)
-from keras.layers.core import Dense, Dropout, Flatten
+from keras.layers.core import Activation, Dense, Dropout, Flatten
 from keras.models import Sequential
 from kerasmodelzoo.utils.data import download_file, load_np_data
 
