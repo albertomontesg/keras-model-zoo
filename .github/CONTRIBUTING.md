@@ -1,101 +1,69 @@
 # Contributing
-I encourage everybody to contribute and share their work with Keras. Have you created and trained a model with Keras? Have you ported a trained model from Caffe to Keras? This is the place to share this models to the world.
+I encourage everybody to contribute and share their work with Keras. Have you created and trained a
+model with Keras? Have you ported a trained model from Caffe to Keras? This is the place to share
+this models to the world.
 
 ## Add a New Model to the Zoo
-All the model's additions to this repository will be done by Pull Request. For each model will be required some information such as references, model definition and it's weights.
+All the model's additions to this repository will be done by Pull Request. For each model will be
+required some information such as references, model definition and it's weights and means.
 
-For each model proposed, all its information related must follow the following structure.
+As this repository is a python package, new models should be added as new modules on
+`kerasmodelzoo/models`.
+
+If the new model has multiple version create a folder with the generic name and subfiles for each
+version of the model. If, on the other hand, it has only one version, create a new file with its
+name.
 ```
-models
-├── {models-name}
-|   ├── README.md
-|   ├── download_weights.sh
-|   ├── model.py
-|   ├── examples [Optional]
-|   |   └── ...
-|   └── notebooks [Optional]
-|       └── ...
-```
-
-### Readme
-Each model should have a README.md file where a description of the model is given and also the references to the related work.
-
-The README.md file should follow the structure available [here](README_TEMPLATE.md).
-
-
-### Model weights
-Another important part to define are the weights of the model. Due to the huge size of the file which stores the weights (~300MB), the weights will not be stored on the repository. On the other hand they should be self hosted by anyone and then give a script to download the weights. All the weights must be stored in `.h5` format. One recommendation is to store in Dropbox and make the file public.
-
-The download script should be named `download_weights.sh` and should be as follows:
-```bash
-wget {url_to_model_weights} -O {model_name}_weights.h5
+kerasmodelzoo
+├── models
+|   ├── __init__.py
+|   ├── modelA
+|   |   ├── __init__.py
+|   |   ├── modelA_v1.py
+|   |   └── modelA_v2.py
+|   ├── modelB.py
 ```
 
-So for any other user who wants to work with this model and its weights, only require to run:
-```bash
-sh download_weights.sh
-```
+### Model File
 
-### Model in Python
-
-In addition to the model's definition and its weights, it would be great to have a python script where the model has been defined. This python file can have a function defined which return the model itself. See the following example:
+For each model file this variables and functions should be given.
 ```python
+
+from keras.layers.convolutional import (Convolution2D, MaxPooling2D,
+                                        ZeroPadding2D)
+from keras.layers.core import Dense, Dropout, Flatten
 from keras.models import Sequential
-from keras.layers.core import Flatten, Dense, Dropout
-from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
-from keras.optimizers import SGD
+from kerasmodelzoo.utils.data import download_file, load_np_data
 
-def VGG_16(weights_path=None):
-    model = Sequential()
-    model.add(ZeroPadding2D((1,1),input_shape=(3,224,224)))
-    model.add(Convolution2D(64, 3, 3, activation='relu'))
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(64, 3, 3, activation='relu'))
-    model.add(MaxPooling2D((2,2), strides=(2,2)))
+# URL to download the weights
+_MODEL_WEIGHTS_URL = 'https://www.url.edu/where/model/is/stored.hdf5
 
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(128, 3, 3, activation='relu'))
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(128, 3, 3, activation='relu'))
-    model.add(MaxPooling2D((2,2), strides=(2,2)))
+def model(weights=False, summary=False):
+    vgg16_model = Sequential()
+    '''
+    Here comes the definition of the model's architecture such as:
 
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(256, 3, 3, activation='relu'))
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(256, 3, 3, activation='relu'))
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(256, 3, 3, activation='relu'))
-    model.add(MaxPooling2D((2,2), strides=(2,2)))
+    vgg16_model.add(ZeroPadding2D((1, 1), input_shape=(3, 224, 224)))
+    vgg16_model.add(Convolution2D(64, 3, 3, activation='relu'))
+    '''
 
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu'))
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu'))
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu'))
-    model.add(MaxPooling2D((2,2), strides=(2,2)))
+    # This lines are required to load the weights if they are asked
+    if weights:
+        filepath = download_file('vgg16_weights.h5', _VGG_16_WEIGHTS_URL)
+        vgg16_model.load_weights(filepath)
 
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu'))
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu'))
-    model.add(ZeroPadding2D((1,1)))
-    model.add(Convolution2D(512, 3, 3, activation='relu'))
-    model.add(MaxPooling2D((2,2), strides=(2,2)))
+    if summary:
+        print(vgg16_model.summary())
 
-    model.add(Flatten())
-    model.add(Dense(4096, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(4096, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(1000, activation='softmax'))
-
-    if weights_path:
-        model.load_weights(weights_path)
-
-    return model
+# A variable with the dataset mean the model was trained with.
+mean = load_np_data('{mean_file}.npy')
 ```
-In the case of multiple models definitions (some variations in dimensions or architecture) at the `models.py` file write one function for each variation of the model.
+
+The mean file should be placed at the `kerasmodelzoo/data/{mean_file}.py`.
+
+The weights should be stored in a hdf5 file without being compressed. It must be stored on Keras.
 
 ### Extra information
-It is also recommendable to give some additional resources such as examples of model usage or python notebooks. All this resources should be stored on its corresponding directories.
+
+It is also recommendable to give some additional resources such as examples of model usage or python
+notebooks. All this resources should be stored on its corresponding directories.
