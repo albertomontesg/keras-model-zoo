@@ -52,8 +52,7 @@ def model(weights=False, summary=False):
     vgg16_model.add(Dense(1000, activation='softmax'))
 
     if weights:
-        filepath = download_file('vgg16_weights.h5',
-            _VGG_16_WEIGHTS_URL)
+        filepath = download_file('vgg16_weights.h5', _VGG_16_WEIGHTS_URL)
         vgg16_model.load_weights(filepath)
 
     if summary:
